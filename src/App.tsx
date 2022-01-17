@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import { Task } from "./interfaces/Task";
 import logo from "./logo.svg";
@@ -17,6 +18,15 @@ function App({ title }: Props) {
 			completed: false,
 		},
 	]);
+
+	const addANewTask = (task: Task) => {
+		setTasks([...tasks, { ...task, id: Math.random(), completed: false }]);
+	};
+
+	const deleteATask = (id: number) => {
+		setTasks(tasks.filter((task) => task.id !== id));
+	};
+
 	return (
 		<div className="bg-dark text-white" style={{ height: "100vh" }}>
 			<nav className="navbar navbar-dark bg-primary">
@@ -33,7 +43,16 @@ function App({ title }: Props) {
 			</nav>
 
 			<div className="main container p-4">
-				<TaskList tasks={tasks} />
+				<div className="row">
+					<div className="col-md-4">
+						<TaskForm addANewTask={addANewTask} />
+					</div>
+					<div className="col-md-8">
+						<div className="row">
+							<TaskList tasks={tasks} deleteATask={deleteATask} />
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
